@@ -1,25 +1,42 @@
 <template>
-  <form class="form">
+  <form class="form" @submit.prevent="submit">
     <h1>Добавить рецепт</h1>
-    <div>
+    <div v-if="show">
       <div class="input">
-        <input type="text" placeholder="Название рецепта">
+        <input type="text" placeholder="Название рецепта" v-model="form.title">
       </div>
       <div class="input">
-        <input type="text" placeholder="Описание рецепта">
+        <input type="text" placeholder="Описание рецепта" v-model="form.description">
       </div>
     </div>
 
     <div class="buttons">
-      <button class="btn" type="submit">Создать</button>
-      <button class="btn secondary" type="button">Убрать форму</button>
+      <button class="btn" type="submit" :disabled="!valid">Создать</button>
+      <button class="btn secondary" type="button" @click="changeShow">
+        {{ show ? 'Убрать' : 'Показать' }} форму
+      </button>
     </div>
   </form>
 </template>
 
 <script>
-export default {
+import {useToggle} from '../composition/toggle'
+import {useForm} from '../composition/form'
 
+export default {
+  props: {
+    onAdd: {
+      type: Function,
+      required: true
+    }
+  },
+  setup(props) {
+    const {visible: show, toggle: changeShow} = useToggle()
+    return {
+      ...useForm(props),
+      show, changeShow
+    }
+  }
 }
 </script>
 

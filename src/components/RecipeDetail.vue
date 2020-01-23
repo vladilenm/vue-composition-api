@@ -1,17 +1,33 @@
 <template>
   <div class="detail">
-    <div class="recipe">
-      <h2>Название рецепта</h2>
-      <a href="#">Показать</a>
-      <p>Описание рецепта</p>
-      <button class="btn remove">Удалить</button>
+    <div class="recipe" v-if="recipe">
+      <h2>{{ recipe.title }}</h2>
+      <a href="#" @click.prevent="toggle">{{ visible ? 'Скрыть' : 'Показать' }}</a>
+      <p v-if="visible">{{ recipe.description }}</p>
+      <button class="btn remove" @click="$emit('remove', recipe.id)">Удалить</button>
     </div>
   </div>
 </template>
 
 <script>
-export default {
+import {useToggle} from '../composition/toggle'
+import {watch} from '@vue/composition-api'
 
+export default {
+  props: {
+    recipe: Object
+  },
+  setup(props) {
+    const {visible, toggle} = useToggle()
+
+    watch(() => props.recipe, () => {
+      visible.value = false
+    })
+
+    return {
+      visible, toggle
+    }
+  }
 }
 </script>
 

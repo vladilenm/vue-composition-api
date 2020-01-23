@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <AddRecipe />
+    <AddRecipe :onAdd="addRecipe" />
 
     <div class="columns">
-      <RecipeList />
-      <RecipeDetail />
+      <RecipeList @select="selectRecipe" :recipes="recipes" />
+      <RecipeDetail :recipe="current" @remove="removeRecipe" />
     </div>
   </div>
 </template>
@@ -13,6 +13,7 @@
 import AddRecipe from '@/components/AddRecipe'
 import RecipeDetail from '@/components/RecipeDetail'
 import RecipeList from '@/components/RecipeList'
+import {useRecipes} from './composition/recipes'
 
 export default {
   name: 'app',
@@ -20,6 +21,11 @@ export default {
     AddRecipe,
     RecipeList,
     RecipeDetail
+  },
+  setup() {
+    return {
+      ...useRecipes()
+    }
   }
 }
 </script>
